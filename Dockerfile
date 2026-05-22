@@ -1,16 +1,7 @@
-FROM python:3.11-slim
+FROM nginx:alpine
 
-# Install uv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY index.html /usr/share/nginx/html/index.html
 
-WORKDIR /app
+EXPOSE 80
 
-# Copy requirements and install
-COPY requirements.txt .
-RUN uv pip install --no-cache -r requirements.txt --system
-
-COPY . .
-
-EXPOSE 8000
-
-CMD ["python", "main.py"]
+CMD ["nginx", "-g", "daemon off;"]

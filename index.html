@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Dev Card Generator</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #f4f4f9; }
+        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        input { width: 100%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 0.75rem; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        #result { margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dev Card Generator</h1>
+        <input type="text" id="username" placeholder="GitHub Username">
+        <button onclick="generateCard()">Generate Card</button>
+    </div>
+    <div id="result"></div>
+
+    <script>
+        async function generateCard() {
+            const username = document.getElementById('username').value;
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Generating...';
+
+            try {
+                const response = await fetch('http://127.0.0.1:8080/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username })
+                });
+                const data = await response.json();
+                resultDiv.innerHTML = data.result || 'Error generating card';
+            } catch (error) {
+                resultDiv.innerHTML = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
